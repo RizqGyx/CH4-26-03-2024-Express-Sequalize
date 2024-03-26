@@ -14,6 +14,8 @@ const getCustomers = async (req, res, next) => {
       queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
     );
 
+    const query = await Customer.find(queryStr);
+
     // 3. Sorting
     // Sorting Ascending = name , Kalau Descending = -name
     if (req.query.sort) {
@@ -43,7 +45,6 @@ const getCustomers = async (req, res, next) => {
       if (skip > numCustomers) throw new Error("Page Does Not Exist!");
     }
 
-    const customers = await Customer.find(queryStr);
     res.status(200).json({
       status: "Success",
       totalData: customers.length,
